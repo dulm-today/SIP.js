@@ -150,6 +150,10 @@ MediaHandler.prototype = Object.create(SIP.MediaHandler.prototype, {
           }
         }
 
+        if (SIP.Hacks.AllBrowsers.customSdp) {
+          sdp = SIP.Hacks.AllBrowsers.customSdp(sdp);
+        }
+
         return {
           body: sdp,
           contentType: 'application/sdp'
@@ -424,6 +428,11 @@ MediaHandler.prototype = Object.create(SIP.MediaHandler.prototype, {
 
     if (config.rtcpMuxPolicy) {
       connConfig.rtcpMuxPolicy = config.rtcpMuxPolicy;
+    }
+
+    if (SIP.Hacks.AllBrowsers.rtcPeerConnectionCertificates) {
+      self.logger.log('cert has been hacked.');
+      connConfig.certificates = SIP.Hacks.AllBrowsers.rtcPeerConnectionCertificates;
     }
 
     this.peerConnection = new SIP.WebRTC.RTCPeerConnection(connConfig);

@@ -33,7 +33,19 @@ var Hacks = {
        *
        **/
       return sdp.replace(/ RTP\/SAVP/gmi, " UDP/TLS/RTP/SAVP");
-    }
+    },
+
+    rtcPeerConnectionCertificates: null,
+
+    customSdpCallbacks: [],
+    customSdp: function (sdp) {
+      for (var i = 0; i < SIP.Hacks.AllBrowsers.customSdpCallbacks.length; ++i) {
+        if (SIP.Hacks.AllBrowsers.customSdpCallbacks[i] instanceof Function) {
+          sdp = SIP.Hacks.AllBrowsers.customSdpCallbacks[i](sdp);
+        }
+      }
+      return sdp;
+    },
   },
   Firefox: {
     /* Condition to detect if hacks are applicable */
